@@ -2,7 +2,9 @@ from fastapi import APIRouter, Form, Path, Query, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
+from models.categoria_model import CategoriaModel
 from models.produto_model import ProdutoModel
+from repos.categoria_repo import CategoriaRepo
 from repos.produto_repo import ProdutoRepo
 from util.mensagens import *
 
@@ -90,4 +92,86 @@ def post_excluir_produto(id: int = Form(...)):
     else:
         response = RedirectResponse("/admin", 303)
         adicionar_mensagem_erro(response, "Não foi possível excluir o produto!")
+        return response
+    
+@router.get("/categorias")
+def get_root(request: Request):
+    categorias = CategoriaRepo.obter_todos()
+    response = templates.TemplateResponse(
+        "admin/categorias.html", {"request": request, "categorias": categorias})
+    return response
+
+@router.get("/alterar_categoria/{id}")
+def get_alterar_categoria(request: Request, id: int = Path(...)):
+    categoria = CategoriaRepo.obter_por_id(id)
+    response = templates.TemplateResponse(
+        "admin/alterar_categoria.html", {"request": request, "categoria": categoria}
+    )
+    return response
+
+@router.post("/alterar_categoria/{id}")
+def post_alterar_categoria(
+    request: Request, 
+    id: int = Path(...),
+    nome: str = Form(...),
+    descricao: str = Form(...),
+    estoque: int = Form(...),
+    preco: float = Form(...)):
+    categoria = CategoriaModel(id, nome, descricao, preco, estoque)
+    if CategoriaRepo.alterar(categoria):
+        response = RedirectResponse("/admin/categorias", 303)
+        adicionar_mensagem_sucesso(response, "categoria alterado com sucesso!")
+        return response
+    else:
+        response = templates.TemplateResponse("/admin/alterar_categoria.html", {"request": request, "categoria": categoria})
+        adicionar_mensagem_erro(response, "Corrija os campos e tente novamente.")
+        return response
+    
+@router.get("/inserir_categoria")
+def get_inserir_categoria(request: Request):
+    categoria = CategoriaModel(None, None, None, None, None)
+    response = templates.TemplateResponse(
+        "admin/inserir_categoria.html", {"request": request, "categoria": categoria}
+    )
+    return response
+
+@router.post("/inserir_categoria")
+def post_inserir_categoria(
+    request: Request,
+    nome: str = Form(...),
+    descricao: str = Form(...),
+    estoque: int = Form(...),
+    preco: float = Form(...)):
+    categoria = CategoriaModel(None, nome, descricao, preco, estoque)
+    if CategoriaRepo.inserir(categoria):
+        response = RedirectResponse("/admin/categorias", 303)
+        adicionar_mensagem_sucesso(response, "categoria inserido com sucesso!")
+        return response
+    else:
+        response = templates.TemplateResponse("/admin/inserir_categoria.html", {"request": request, "categoria": categoria})
+        adicionar_mensagem_erro(response, "Corrija os campos e tente novamente.")
+        return response
+    
+@router.get("/excluir_categoria/{id}")
+def get_excluir_categoria(request: Request, id: int = Path(...)):
+    categoria = CategoriaRepo.obter_por_id(id)
+    if categoria:
+        response = templates.TemplateResponse(
+            "admin/excluir_categoria.html", {"request": request, "categoria": categoria}
+        )
+        return response
+    else:
+        response = RedirectResponse("/admin/categorias", 303)
+        adicionar_mensagem_erro(response, "O categoria que você tentou excluir não existe!")
+        return response
+    
+@router.post("/excluir_categoria")
+def post_excluir_categoria(id: int = Form(...)):
+    if CategoriaRepo.excluir(id):
+        response = RedirectResponse("/admin/categorias", 303)
+        adicionar_mensagem_sucesso(response, "categoria excluído com sucesso!")
+        return response
+    else:
+        response = RedirectResponse("/admin/categorias", 303)
+        adicionar_mensagem_erro(response, "Não foi possível excluir o categoria!")
         return response
