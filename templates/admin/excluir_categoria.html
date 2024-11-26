@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% block titulo %}Exclusão de Produto{% endblock %}
+{% block titulo %}Exclusão de Categoria{% endblock %}
 {% block conteudo %}
-<h1>Exclusão de Produto</h1>
+<h1>Exclusão de Categoria</h1>
 <hr>
-<form method="post" class="row" action="/admin/excluir_produto">
-    <input type="hidden" name="id" value="{{produto.id}}">
-    <p class="lead">Deseja realmente excluir o produto <b>{{produto.nome}}</b>?</p>
+<form method="post" class="row" action="/admin/excluir_categoria">
+    <input type="hidden" name="id" value="{{categoria.id}}">
+    <p class="lead">Deseja realmente excluir a categoria <b>{{categoria.nome}}</b>?</p>
     <div class="col-6">
-        <a href="/admin" class="btn btn-secondary">Não</a>
+        <a href="/admin/categorias" class="btn btn-secondary">Não</a>
         <button type="submit" class="btn btn-danger">
             Sim
         </button>

@@ -113,11 +113,8 @@ def get_alterar_categoria(request: Request, id: int = Path(...)):
 def post_alterar_categoria(
     request: Request, 
     id: int = Path(...),
-    nome: str = Form(...),
-    descricao: str = Form(...),
-    estoque: int = Form(...),
-    preco: float = Form(...)):
-    categoria = CategoriaModel(id, nome, descricao, preco, estoque)
+    nome: str = Form(...)):
+    categoria = CategoriaModel(id, nome)
     if CategoriaRepo.alterar(categoria):
         response = RedirectResponse("/admin/categorias", 303)
         adicionar_mensagem_sucesso(response, "categoria alterado com sucesso!")
@@ -129,7 +126,7 @@ def post_alterar_categoria(
     
 @router.get("/inserir_categoria")
 def get_inserir_categoria(request: Request):
-    categoria = CategoriaModel(None, None, None, None, None)
+    categoria = CategoriaModel(None)
     response = templates.TemplateResponse(
         "admin/inserir_categoria.html", {"request": request, "categoria": categoria}
     )
@@ -138,11 +135,8 @@ def get_inserir_categoria(request: Request):
 @router.post("/inserir_categoria")
 def post_inserir_categoria(
     request: Request,
-    nome: str = Form(...),
-    descricao: str = Form(...),
-    estoque: int = Form(...),
-    preco: float = Form(...)):
-    categoria = CategoriaModel(None, nome, descricao, preco, estoque)
+    nome: str = Form(...)):
+    categoria = CategoriaModel(None, nome)
     if CategoriaRepo.inserir(categoria):
         response = RedirectResponse("/admin/categorias", 303)
         adicionar_mensagem_sucesso(response, "categoria inserido com sucesso!")

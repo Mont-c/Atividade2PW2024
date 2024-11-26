@@ -1,12 +1,12 @@
 SQL_CRIAR_TABELA = """
     CREATE TABLE IF NOT EXISTS categoria (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome VARCHAR(100) NOT NULL;
+        nome VARCHAR(100) NOT NULL);
 """
 
 SQL_INSERIR = """
     INSERT INTO categoria (nome) 
-    VALUES (?
+    VALUES (?);
 """
 
 SQL_ALTERAR = """

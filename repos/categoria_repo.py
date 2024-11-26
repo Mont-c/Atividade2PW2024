@@ -16,7 +16,7 @@ class CategoriaRepo:
         with obter_conexao() as db:
             cursor = db.cursor()
             cursor.execute(SQL_INSERIR, (
-                categoria.nome))
+                categoria.nome,))
             if cursor.rowcount == 0:
                 return None
             else:
@@ -79,14 +79,13 @@ class CategoriaRepo:
             if count > 0:
                 return
             categorias_iniciais = [
-            ("Frutas"),
-            ("Verduras"),
-            ("Legumes"),
-            ("Cereais"),
-            ("Grãos"),
-            ("Temperos"),
-            ("Raízes")]
+                ("Frutas"),
+                ("Verduras"),
+                ("Legumes"),
+                ("Cereais"),
+                ("Grãos"),
+                ("Temperos"),
+                ("Raízes")]
             for nome in categorias_iniciais:
-                cursor.execute(SQL_INSERIR, (nome))
+                cursor.execute(SQL_INSERIR, (nome,))
             db.commit()
-
