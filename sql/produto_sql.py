@@ -4,8 +4,10 @@ SQL_CRIAR_TABELA = """
         nome VARCHAR(100) NOT NULL,
         descricao VARCHAR(1000) NOT NULL,
         preco REAL NOT NULL,
-        estoque INTEGER NOT NULL
-        idcategoria INTEGER NOT NULL);
+        estoque INTEGER NOT NULL,
+        idcategoria INTEGER NOT NULL,
+        FOREIGN KEY (idcategoria) REFERENCES categoria(id)
+        );
 """
 
 SQL_INSERIR = """

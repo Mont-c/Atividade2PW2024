@@ -16,13 +16,25 @@
             <label for="descricao">Descrição</label>
         </div>
     </div>
-    <div class="col-6">
+    <div class="col-4">
+        <div class="form-floating mb-3">
+            <select class="form-select" name="idcategoria" id="idcategoria">
+                {% for c in categoria %}
+                    <option value="{{c.id}}">
+                        {{c.nome}}
+                    </option>
+                {% endfor %}
+            </select>
+            <label for="idcategoria">Categoria</label>
+        </div>
+    </div>
+    <div class="col-4">
         <div class="form-floating mb-3">
             <input type="text" class="form-control" name="estoque" id="estoque" placeholder=" " value="{{produto.estoque or ''}}"/>
             <label for="estoque">Estoque</label>
         </div>
     </div>
-    <div class="col-6">
+    <div class="col-4">
         <div class="form-floating mb-3">
             <input type="text" class="form-control" name="preco" id="preco" placeholder=" " value="{{produto.preco or ''}}" />
             <label for="preco">Preço</label>

@@ -15,8 +15,9 @@ templates = Jinja2Templates(directory="templates")
 @router.get("/")
 def get_root(request: Request):
     produtos = ProdutoRepo.obter_todos()
+    categoria = CategoriaRepo.obter_todos()
     response = templates.TemplateResponse(
-        "admin/index.html", {"request": request, "produtos": produtos})
+        "admin/index.html", {"request": request, "produtos": produtos, "categorias": categoria})
     return response
 
 @router.get("/alterar_produto/{id}")
@@ -34,8 +35,9 @@ def post_alterar_produto(
     nome: str = Form(...),
     descricao: str = Form(...),
     estoque: int = Form(...),
-    preco: float = Form(...)):
-    produto = ProdutoModel(id, nome, descricao, preco, estoque)
+    preco: float = Form(...),
+    idcategoria: int = Form(...)):
+    produto = ProdutoModel(id, nome, descricao, preco, estoque, idcategoria)
     if ProdutoRepo.alterar(produto):
         response = RedirectResponse("/admin", 303)
         adicionar_mensagem_sucesso(response, "Produto alterado com sucesso!")
@@ -47,9 +49,10 @@ def post_alterar_produto(
     
 @router.get("/inserir_produto")
 def get_inserir_produto(request: Request):
-    produto = ProdutoModel(None, None, None, None, None)
+    produto = ProdutoModel(None, None, None, None, None, None)
+    categoria = CategoriaRepo.obter_todos()
     response = templates.TemplateResponse(
-        "admin/inserir_produto.html", {"request": request, "produto": produto}
+        "admin/inserir_produto.html", {"request": request, "produto": produto, "categoria": categoria}
     )
     return response
 
@@ -59,8 +62,9 @@ def post_inserir_produto(
     nome: str = Form(...),
     descricao: str = Form(...),
     estoque: int = Form(...),
-    preco: float = Form(...)):
-    produto = ProdutoModel(None, nome, descricao, preco, estoque)
+    preco: float = Form(...),
+    idcategoria: int = Form(...)):
+    produto = ProdutoModel(None, nome, descricao, preco, estoque, idcategoria)
     if ProdutoRepo.inserir(produto):
         response = RedirectResponse("/admin", 303)
         adicionar_mensagem_sucesso(response, "Produto inserido com sucesso!")
